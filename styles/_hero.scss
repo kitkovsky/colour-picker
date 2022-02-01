@@ -1,0 +1,100 @@
+.colours {
+  min-height: 80vh;
+  display: flex;
+  color: rgb(212, 212, 212);
+}
+
+.colour {
+  height: 80vh;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  position: relative;
+  overflow: hidden;
+
+  h2 {
+    font-size: 2rem;
+    cursor: pointer;
+  }
+}
+
+.sliders {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 0;
+  background: white;
+  padding: 1rem;
+  width: 80%;
+  border-top-right-radius: 1rem;
+  border-top-left-radius: 1rem;
+  opacity: 0;
+  transform: translateY(20rem);
+  transition: all 0.5s ease-in-out;
+  pointer-events: none;
+
+  button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.5rem;
+    border-top-right-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border: none;
+    background: $dark-blue;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+  }
+}
+
+.sliders-active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  min-height: 20vh;
+
+  button {
+    font-size: 1.2rem;
+    margin: 1rem;
+    padding: 1rem 2rem;
+    background: $dark-blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 1rem;
+  }
+
+  p {
+    font-size: 1.2rem;
+  }
+}
+
+.library-panel,
+.generate-panel,
+.save-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.adjust, .lock {
+  font-size: 2rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin: 2rem 0rem;
+}
