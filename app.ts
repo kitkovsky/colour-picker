@@ -4,6 +4,7 @@ const sliders = document.querySelectorAll<HTMLInputElement>(
   "input[type='range']"
 );
 const currentHexes = document.querySelectorAll<HTMLDivElement>(".color h2");
+let initialColours: chroma.Color[] = [];
 
 sliders.forEach((slider) => {
   slider.addEventListener("input", hslControls);
@@ -13,6 +14,7 @@ function randomColours() {
   colourDivs.forEach((div) => {
     const hexText = div.children[0] as HTMLElement;
     const randomColour = chroma.random();
+    initialColours.push(randomColour);
     const randomColourHex = randomColour.hex();
 
     div.style.backgroundColor = randomColourHex;
@@ -71,18 +73,21 @@ function hslControls(event: Event) {
   const sliders = target.parentElement!.querySelectorAll(
     "input[type='range']"
   ) as NodeListOf<HTMLInputElement>;
-  const hue = sliders[0];
-  const saturation = sliders[1];
-  const brightness = sliders[2];
+  const hueSlider = sliders[0];
+  const saturationSlider = sliders[1];
+  const brightnessSlider = sliders[2];
 
-  const bgColourText = currentDiv.querySelector("h2")?.innerText!;
+  let bgColourText = initialColours[colourDivId];
+  console.log(`initial colour: ${bgColourText} for div: ${colourDivId}`);
 
   const newColour = chroma(bgColourText)
-    .set("hsl.h", hue.value)
-    .set("hsl.s", saturation.value)
-    .set("hsl.l", brightness.value);
+    .set("hsl.h", hueSlider.value)
+    .set("hsl.s", saturationSlider.value)
+    .set("hsl.l", brightnessSlider.value);
 
   currentDiv.style.backgroundColor = newColour.hex();
+  currentDiv.querySelector("h2")!.innerText = newColour.hex();
+  checkTextContrast(newColour, currentDiv);
 }
 
 randomColours();
