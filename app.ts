@@ -14,6 +14,9 @@ function randomColours() {
     div.style.backgroundColor = randomColourHex;
     hexText.innerText = randomColourHex;
     checkTextContrast(randomColour, div);
+
+    const sliders = div.querySelectorAll(".sliders input");
+    colourizeSliders(randomColour, sliders);
   });
 }
 
@@ -31,4 +34,26 @@ function checkTextContrast(colour: chroma.Color, colourDiv: HTMLDivElement) {
     lock.style.color = "white";
   }
 }
+
+function colourizeSliders(colour: chroma.Color, sliders: NodeListOf<Element>) {
+  const hue = sliders[0] as HTMLInputElement;
+  hue.style.backgroundImage =
+    "linear-gradient(to right, rgb(204, 75, 75), rgb(204, 204, 75), rgb(75, 204, 75), rgb(75, 204, 204), rgb(75, 75, 204), rgb(204, 75, 204), rgb(204, 75, 75))";
+
+  const saturation = sliders[1] as HTMLInputElement;
+  const minSaturation = colour.set("hsl.s", 0);
+  const maxSaturation = colour.set("hsl.s", 1);
+  const saturationScale = chroma.scale([minSaturation, colour, maxSaturation]);
+  saturation.style.backgroundImage = `linear-gradient(to right, ${saturationScale(
+    0
+  )}, ${saturationScale(1)})`;
+
+  const brightness = sliders[2] as HTMLInputElement;
+  const midBrightness = colour.set("hsl.l", 0.5);
+  const brightnessScale = chroma.scale(["black", midBrightness, "white"]);
+  brightness.style.backgroundImage = `linear-gradient(to right, ${brightnessScale(
+    0
+  )}, ${brightnessScale(0.5)}, ${brightnessScale(1)})`;
+}
+
 randomColours();
