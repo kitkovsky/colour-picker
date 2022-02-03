@@ -2,10 +2,24 @@
 const colourDivs = document.querySelectorAll(".colour");
 const generateButton = document.querySelector(".generate");
 const sliders = document.querySelectorAll("input[type='range']");
-const currentHexes = document.querySelectorAll(".color h2");
+const currentHexes = document.querySelectorAll(".colour h2");
+const copyContainer = document.querySelector(".copy-container");
 let initialColours = [];
 sliders.forEach((slider) => {
     slider.addEventListener("input", hslControls);
+});
+currentHexes.forEach((hex) => {
+    hex.addEventListener("click", copyHexToClipboard.bind(hex, hex));
+});
+copyContainer.addEventListener("click", () => {
+    copyContainer.classList.remove("active");
+    copyContainer.children[0].classList.remove("active");
+});
+document.addEventListener("keypress", (event) => {
+    if (event.code === "Escape" || event.code === "Enter") {
+        copyContainer.classList.remove("active");
+        copyContainer.children[0].classList.remove("active");
+    }
 });
 function randomColours() {
     colourDivs.forEach((div) => {
@@ -62,7 +76,6 @@ function hslControls(event) {
     const saturationSlider = sliders[1];
     const brightnessSlider = sliders[2];
     let bgColourText = initialColours[colourDivId];
-    console.log(`initial colour: ${bgColourText} for div: ${colourDivId}`);
     const newColour = chroma(bgColourText)
         .set("hsl.h", hueSlider.value)
         .set("hsl.s", saturationSlider.value)
@@ -91,4 +104,10 @@ function setSliders() {
         });
     });
 }
+function copyHexToClipboard(hex) {
+    navigator.clipboard.writeText(hex.innerText);
+    copyContainer.classList.add("active");
+    copyContainer.children[0].classList.add("active");
+}
 randomColours();
+//# sourceMappingURL=app.js.map
