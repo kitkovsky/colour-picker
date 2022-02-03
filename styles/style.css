@@ -77,6 +77,15 @@ i {
   pointer-events: all;
 }
 
+input[type=range] {
+  -webkit-appearance: none;
+  margin: 1rem 0;
+  width: 100%;
+  position: relative;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
 .controls {
   display: flex;
   flex-direction: column;
