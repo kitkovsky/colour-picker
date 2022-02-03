@@ -1,12 +1,15 @@
 const colourDivs = document.querySelectorAll<HTMLDivElement>(".colour");
-const generateButton = document.querySelector<HTMLButtonElement>(".generate");
+const generateButton =
+  document.querySelector<HTMLButtonElement>(".generate-button")!;
 const sliders = document.querySelectorAll<HTMLInputElement>(
   "input[type='range']"
 );
 const currentHexes = document.querySelectorAll<HTMLDivElement>(".colour h2");
 const copyContainer = document.querySelector(".copy-container")!;
 const adjustButtons = document.querySelectorAll<HTMLButtonElement>(".adjust");
-const closeAdjustmentButtons = document.querySelectorAll<HTMLButtonElement>(".close-adjustment");
+const lockButtons = document.querySelectorAll<HTMLButtonElement>(".lock");
+const closeAdjustmentButtons =
+  document.querySelectorAll<HTMLButtonElement>(".close-adjustment");
 let initialColours: chroma.Color[] = [];
 
 sliders.forEach((slider) => {
@@ -38,14 +41,34 @@ adjustButtons.forEach((button) => {
 closeAdjustmentButtons.forEach((button) => {
   button.addEventListener("click", () => {
     button.parentElement!.classList.remove("active");
-  })
-})
+  });
+});
+
+generateButton.addEventListener("click", randomColours);
+
+lockButtons.forEach((button) => {
+  button.addEventListener("click", lockColour.bind(button, button));
+});
+
+function lockColour(button: HTMLButtonElement) {
+  button.parentElement!.parentElement!.classList.toggle("locked");
+  if (button.children[0].classList.contains("fa-lock-open")) {
+    button.children[0].classList.replace("fa-lock-open", "fa-lock");
+  } else {
+    button.children[0].classList.replace("fa-lock", "fa-lock-open");
+  }
+}
 
 function randomColours() {
   colourDivs.forEach((div) => {
     const hexText = div.children[0] as HTMLElement;
     const randomColour = chroma.random();
-    initialColours.push(randomColour);
+    if (div.classList.contains("locked")) {
+      initialColours.push(chroma(hexText.innerText));
+      return;
+    } else {
+      initialColours.push(randomColour);
+    }
     const randomColourHex = randomColour.hex();
 
     div.style.backgroundColor = randomColourHex;
