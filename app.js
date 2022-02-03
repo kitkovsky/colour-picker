@@ -19,6 +19,8 @@ function randomColours() {
         const sliders = div.querySelectorAll(".sliders input");
         colourizeSliders(randomColour, sliders);
     });
+    setSliders();
+    // TODO: check the contrast of the sliders div?
 }
 function checkTextContrast(colour, colourDiv) {
     const text = colourDiv.children[0];
@@ -68,5 +70,25 @@ function hslControls(event) {
     currentDiv.style.backgroundColor = newColour.hex();
     currentDiv.querySelector("h2").innerText = newColour.hex();
     checkTextContrast(newColour, currentDiv);
+    colourizeSliders(newColour, sliders);
+}
+function setSliders() {
+    colourDivs.forEach((div) => {
+        const sliders = div.children[2].querySelectorAll("input");
+        const divColour = div.style.backgroundColor;
+        sliders.forEach((slider) => {
+            switch (slider.name) {
+                case "hue":
+                    slider.value = chroma(divColour).hsl()[0].toString();
+                    break;
+                case "saturation":
+                    slider.value = chroma(divColour).hsl()[1].toString();
+                    break;
+                case "brightness":
+                    slider.value = chroma(divColour).hsl()[2].toString();
+                    break;
+            }
+        });
+    });
 }
 randomColours();
