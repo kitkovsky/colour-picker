@@ -4,6 +4,8 @@ const generateButton = document.querySelector(".generate");
 const sliders = document.querySelectorAll("input[type='range']");
 const currentHexes = document.querySelectorAll(".colour h2");
 const copyContainer = document.querySelector(".copy-container");
+const adjustButtons = document.querySelectorAll(".adjust");
+const closeAdjustmentButtons = document.querySelectorAll(".close-adjustment");
 let initialColours = [];
 sliders.forEach((slider) => {
     slider.addEventListener("input", hslControls);
@@ -20,6 +22,16 @@ document.addEventListener("keypress", (event) => {
         copyContainer.classList.remove("active");
         copyContainer.children[0].classList.remove("active");
     }
+});
+adjustButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        button.parentElement.parentElement.children[2].classList.toggle("active");
+    });
+});
+closeAdjustmentButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        button.parentElement.classList.remove("active");
+    });
 });
 function randomColours() {
     colourDivs.forEach((div) => {
@@ -67,9 +79,13 @@ function colourizeSliders(colour, sliders) {
 }
 function hslControls(event) {
     const target = event.target;
-    const colourDivId = parseInt(target.getAttribute("data-hue")) ||
+    let colourDivId = parseInt(target.getAttribute("data-hue")) ||
         parseInt(target.getAttribute("data-sat")) ||
         parseInt(target.getAttribute("data-bright"));
+    // FIXME: for some god forsaken reason if the first div's hue or saturation is changed, the colourDivId is NaN
+    if (isNaN(colourDivId)) {
+        colourDivId = 0;
+    }
     const currentDiv = colourDivs[colourDivId];
     const sliders = target.parentElement.querySelectorAll("input[type='range']");
     const hueSlider = sliders[0];
