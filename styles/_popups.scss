@@ -1,4 +1,6 @@
-.copy-container {
+.copy-container,
+.save-container,
+.library-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -13,12 +15,16 @@
   transition: all 0.3s ease-in-out;
 }
 
-.copy-container.active {
+.copy-container.active,
+.save-container.active,
+.library-container.active {
   opacity: 1;
   pointer-events: all;
 }
 
-.copy-popup {
+.copy-popup,
+.save-popup,
+.library-popup {
   background: white;
   display: flex;
   flex-direction: column;
@@ -29,12 +35,47 @@
   transform: translateY(-2rem);
   min-width: 20vw;
   min-height: 10vh;
-  
-  h3, h4 {
+
+  h3,
+  h4 {
     font-size: 2rem;
   }
 }
 
-.copy-popup.active {
+.save-popup {
+  min-width: 35vw;
+  min-height: 20vh;
+  position: relative;
+
+  h4 {
+    padding-top: 1rem;
+  }
+}
+
+.submit-save {
+  color: white;
+  background-color: $dark-blue;
+  border: none;
+  border-radius: 1rem;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.close-save {
+  color: white;
+  background-color: $dark-blue;
+  border: none;
+  border-top-right-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  padding: 1rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+
+.copy-popup.active,
+.save-popup.active,
+.library-popup.active {
   transform: translateY(0);
 }
