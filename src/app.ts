@@ -1,3 +1,4 @@
+// TODO: break up the code into smaller files, or rearrange this big boi
 const colourDivs = document.querySelectorAll<HTMLDivElement>(".colour");
 const generateButton =
   document.querySelector<HTMLButtonElement>(".generate-button")!;
@@ -11,6 +12,7 @@ const lockButtons = document.querySelectorAll<HTMLButtonElement>(".lock");
 const closeAdjustmentButtons =
   document.querySelectorAll<HTMLButtonElement>(".close-adjustment");
 let initialColours: chroma.Color[] = [];
+let savedPalettes;
 
 sliders.forEach((slider) => {
   slider.addEventListener("input", hslControls);
@@ -26,7 +28,7 @@ copyContainer.addEventListener("click", () => {
 });
 
 document.addEventListener("keypress", (event) => {
-  if (event.code === "Escape" || event.code === "Enter") {
+  if (event.code === "Escape") {
     copyContainer.classList.remove("active");
     copyContainer.children[0].classList.remove("active");
   }
@@ -175,6 +177,30 @@ function copyHexToClipboard(hex: HTMLDivElement) {
   navigator.clipboard.writeText(hex.innerText);
   copyContainer.classList.add("active");
   copyContainer.children[0].classList.add("active");
+}
+
+// local storage stuff
+const saveButton = document.querySelector(".save-button") as HTMLButtonElement;
+const submitSave = document.querySelector(".submit-save") as HTMLButtonElement;
+const closeSave = document.querySelector(".close-save") as HTMLButtonElement;
+const saveContainer = document.querySelector(
+  ".save-container"
+) as HTMLDivElement;
+const saveInput = document.querySelector(".save-name") as HTMLInputElement;
+
+saveButton.addEventListener("click", openPalette);
+closeSave.addEventListener("click", closePalette);
+
+function openPalette(event: Event) {
+  const popup = saveContainer.children[0];
+  saveContainer.classList.add("active");
+  popup.classList.add("active");
+}
+
+function closePalette(event: Event) {
+  const popup = saveContainer.children[0];
+  saveContainer.classList.remove("active");
+  popup.classList.remove("active");
 }
 
 randomColours();

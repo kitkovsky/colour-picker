@@ -1,4 +1,5 @@
 "use strict";
+// TODO: break up the code into smaller files, or rearrange this big boi
 const colourDivs = document.querySelectorAll(".colour");
 const generateButton = document.querySelector(".generate-button");
 const sliders = document.querySelectorAll("input[type='range']");
@@ -8,6 +9,7 @@ const adjustButtons = document.querySelectorAll(".adjust");
 const lockButtons = document.querySelectorAll(".lock");
 const closeAdjustmentButtons = document.querySelectorAll(".close-adjustment");
 let initialColours = [];
+let savedPalettes;
 sliders.forEach((slider) => {
     slider.addEventListener("input", hslControls);
 });
@@ -19,7 +21,7 @@ copyContainer.addEventListener("click", () => {
     copyContainer.children[0].classList.remove("active");
 });
 document.addEventListener("keypress", (event) => {
-    if (event.code === "Escape" || event.code === "Enter") {
+    if (event.code === "Escape") {
         copyContainer.classList.remove("active");
         copyContainer.children[0].classList.remove("active");
     }
@@ -144,6 +146,24 @@ function copyHexToClipboard(hex) {
     navigator.clipboard.writeText(hex.innerText);
     copyContainer.classList.add("active");
     copyContainer.children[0].classList.add("active");
+}
+// local storage stuff
+const saveButton = document.querySelector(".save-button");
+const submitSave = document.querySelector(".submit-save");
+const closeSave = document.querySelector(".close-save");
+const saveContainer = document.querySelector(".save-container");
+const saveInput = document.querySelector(".save-name");
+saveButton.addEventListener("click", openPalette);
+closeSave.addEventListener("click", closePalette);
+function openPalette(event) {
+    const popup = saveContainer.children[0];
+    saveContainer.classList.add("active");
+    popup.classList.add("active");
+}
+function closePalette(event) {
+    const popup = saveContainer.children[0];
+    saveContainer.classList.remove("active");
+    popup.classList.remove("active");
 }
 randomColours();
 //# sourceMappingURL=app.js.map
