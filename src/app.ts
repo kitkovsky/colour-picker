@@ -11,7 +11,7 @@ const adjustButtons = document.querySelectorAll<HTMLButtonElement>(".adjust");
 const lockButtons = document.querySelectorAll<HTMLButtonElement>(".lock");
 const closeAdjustmentButtons =
   document.querySelectorAll<HTMLButtonElement>(".close-adjustment");
-let initialColours: chroma.Color[] = [];
+let initialColours: string[] = [];
 
 sliders.forEach((slider) => {
   slider.addEventListener("input", hslControls);
@@ -65,10 +65,10 @@ function randomColours() {
     const hexText = div.children[0] as HTMLElement;
     const randomColour = chroma.random();
     if (div.classList.contains("locked")) {
-      initialColours.push(chroma(hexText.innerText));
+      initialColours.push(hexText.innerText);
       return;
     } else {
-      initialColours.push(randomColour);
+      initialColours.push(randomColour.hex());
     }
     const randomColourHex = randomColour.hex();
 
@@ -193,9 +193,15 @@ const saveContainer = document.querySelector(
   ".save-container"
 ) as HTMLDivElement;
 const saveInput = document.querySelector(".save-name") as HTMLInputElement;
-const libraryContainer = document.querySelector(".library-container") as HTMLDivElement;
-const libraryButton = document.querySelector(".library-button") as HTMLButtonElement;
-const closeLibraryButton = document.querySelector(".close-library") as HTMLButtonElement;
+const libraryContainer = document.querySelector(
+  ".library-container"
+) as HTMLDivElement;
+const libraryButton = document.querySelector(
+  ".library-button"
+) as HTMLButtonElement;
+const closeLibraryButton = document.querySelector(
+  ".close-library"
+) as HTMLButtonElement;
 let savedPalettes: Palette[] = [];
 
 saveButton.addEventListener("click", openPalette);
@@ -260,6 +266,7 @@ function generatePaletteForLib(newPalette: Palette) {
   const paletteButton = document.createElement("button");
   paletteButton.classList.add("pick-palette-button", newPalette.id.toString());
   paletteButton.innerText = "Select";
+  paletteButton.addEventListener("click", selectPaletteFromLibrary);
 
   paletteDiv.appendChild(title);
   paletteDiv.appendChild(preview);
@@ -278,6 +285,21 @@ function closeLibrary() {
   const popup = libraryContainer.children[0];
   libraryContainer.classList.remove("active");
   popup.classList.remove("active");
+}
+
+function selectPaletteFromLibrary(event: Event) {
+  closeLibrary();
+  const target = event.target as HTMLButtonElement;
+  const paletteId = parseInt(target.classList[1]);
+  initialColours = [];
+  savedPalettes[paletteId].colours.forEach((colour, index) => {
+    initialColours.push(colour);
+    colourDivs[index].style.backgroundColor = colour;
+    (colourDivs[index].children[0] as HTMLDivElement).innerText = colour;
+    checkTextContrast(chroma(colour), colourDivs[index]);
+    colourizeSliders(chroma(colour), colourDivs[index].querySelectorAll(".sliders input"));
+  });
+  setSliders();
 }
 
 randomColours();

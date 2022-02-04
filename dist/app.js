@@ -53,11 +53,11 @@ function randomColours() {
         const hexText = div.children[0];
         const randomColour = chroma.random();
         if (div.classList.contains("locked")) {
-            initialColours.push(chroma(hexText.innerText));
+            initialColours.push(hexText.innerText);
             return;
         }
         else {
-            initialColours.push(randomColour);
+            initialColours.push(randomColour.hex());
         }
         const randomColourHex = randomColour.hex();
         div.style.backgroundColor = randomColourHex;
@@ -210,6 +210,7 @@ function generatePaletteForLib(newPalette) {
     const paletteButton = document.createElement("button");
     paletteButton.classList.add("pick-palette-button", newPalette.id.toString());
     paletteButton.innerText = "Select";
+    paletteButton.addEventListener("click", selectPaletteFromLibrary);
     paletteDiv.appendChild(title);
     paletteDiv.appendChild(preview);
     paletteDiv.appendChild(paletteButton);
@@ -225,6 +226,20 @@ function closeLibrary() {
     const popup = libraryContainer.children[0];
     libraryContainer.classList.remove("active");
     popup.classList.remove("active");
+}
+function selectPaletteFromLibrary(event) {
+    closeLibrary();
+    const target = event.target;
+    const paletteId = parseInt(target.classList[1]);
+    initialColours = [];
+    savedPalettes[paletteId].colours.forEach((colour, index) => {
+        initialColours.push(colour);
+        colourDivs[index].style.backgroundColor = colour;
+        colourDivs[index].children[0].innerText = colour;
+        checkTextContrast(chroma(colour), colourDivs[index]);
+        colourizeSliders(chroma(colour), colourDivs[index].querySelectorAll(".sliders input"));
+    });
+    setSliders();
 }
 randomColours();
 //# sourceMappingURL=app.js.map
