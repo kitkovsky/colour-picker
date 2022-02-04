@@ -12,7 +12,6 @@ const lockButtons = document.querySelectorAll<HTMLButtonElement>(".lock");
 const closeAdjustmentButtons =
   document.querySelectorAll<HTMLButtonElement>(".close-adjustment");
 let initialColours: chroma.Color[] = [];
-let savedPalettes;
 
 sliders.forEach((slider) => {
   slider.addEventListener("input", hslControls);
@@ -180,6 +179,12 @@ function copyHexToClipboard(hex: HTMLDivElement) {
 }
 
 // local storage stuff
+interface Palette {
+  id: number;
+  name: string;
+  colours: string[];
+}
+
 const saveButton = document.querySelector(".save-button") as HTMLButtonElement;
 const submitSave = document.querySelector(".submit-save") as HTMLButtonElement;
 const closeSave = document.querySelector(".close-save") as HTMLButtonElement;
@@ -187,20 +192,48 @@ const saveContainer = document.querySelector(
   ".save-container"
 ) as HTMLDivElement;
 const saveInput = document.querySelector(".save-name") as HTMLInputElement;
+let savedPalettes: Palette[] = [];
 
 saveButton.addEventListener("click", openPalette);
 closeSave.addEventListener("click", closePalette);
+submitSave.addEventListener("click", savePalette);
+saveInput.addEventListener("keyup", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    submitSave.click();
+  }
+})
 
-function openPalette(event: Event) {
+function openPalette() {
   const popup = saveContainer.children[0];
   saveContainer.classList.add("active");
   popup.classList.add("active");
+  saveInput.focus();
 }
 
-function closePalette(event: Event) {
+function closePalette() {
   const popup = saveContainer.children[0];
   saveContainer.classList.remove("active");
   popup.classList.remove("active");
+}
+
+function savePalette() {
+  closePalette();
+  const paletteName = saveInput.value;
+  const colours: string[] = [];
+  currentHexes.forEach((hex) => {
+    colours.push(hex.innerText);
+  });
+
+  const paletteId = savedPalettes.length;
+  const newPalette: Palette = {
+    id: paletteId,
+    name: paletteName,
+    colours: colours,
+  };
+  savedPalettes.push(newPalette);
+  localStorage.setItem("saved-palettes", JSON.stringify(savedPalettes));
+  saveInput.value = "";
 }
 
 randomColours();

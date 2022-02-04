@@ -9,7 +9,6 @@ const adjustButtons = document.querySelectorAll(".adjust");
 const lockButtons = document.querySelectorAll(".lock");
 const closeAdjustmentButtons = document.querySelectorAll(".close-adjustment");
 let initialColours = [];
-let savedPalettes;
 sliders.forEach((slider) => {
     slider.addEventListener("input", hslControls);
 });
@@ -147,23 +146,48 @@ function copyHexToClipboard(hex) {
     copyContainer.classList.add("active");
     copyContainer.children[0].classList.add("active");
 }
-// local storage stuff
 const saveButton = document.querySelector(".save-button");
 const submitSave = document.querySelector(".submit-save");
 const closeSave = document.querySelector(".close-save");
 const saveContainer = document.querySelector(".save-container");
 const saveInput = document.querySelector(".save-name");
+let savedPalettes = [];
 saveButton.addEventListener("click", openPalette);
 closeSave.addEventListener("click", closePalette);
-function openPalette(event) {
+submitSave.addEventListener("click", savePalette);
+saveInput.addEventListener("keyup", (event) => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        submitSave.click();
+    }
+});
+function openPalette() {
     const popup = saveContainer.children[0];
     saveContainer.classList.add("active");
     popup.classList.add("active");
+    saveInput.focus();
 }
-function closePalette(event) {
+function closePalette() {
     const popup = saveContainer.children[0];
     saveContainer.classList.remove("active");
     popup.classList.remove("active");
+}
+function savePalette() {
+    closePalette();
+    const paletteName = saveInput.value;
+    const colours = [];
+    currentHexes.forEach((hex) => {
+        colours.push(hex.innerText);
+    });
+    const paletteId = savedPalettes.length;
+    const newPalette = {
+        id: paletteId,
+        name: paletteName,
+        colours: colours,
+    };
+    savedPalettes.push(newPalette);
+    localStorage.setItem("saved-palettes", JSON.stringify(savedPalettes));
+    saveInput.value = "";
 }
 randomColours();
 //# sourceMappingURL=app.js.map
