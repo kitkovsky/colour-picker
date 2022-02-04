@@ -52,6 +52,15 @@
   }
 }
 
+.library-popup {
+  padding: 1rem;
+  justify-content: flex-start;
+  overflow-y: scroll;
+  min-width: 35vw;
+  max-height: 50vh;
+  position: relative;
+}
+
 .submit-save {
   color: white;
   background-color: $dark-blue;
@@ -61,7 +70,8 @@
   cursor: pointer;
 }
 
-.close-save {
+.close-save,
+.close-library {
   color: white;
   background-color: $dark-blue;
   border: none;
@@ -78,4 +88,36 @@
 .save-popup.active,
 .library-popup.active {
   transform: translateY(0);
+}
+
+.pick-palette-button {
+  color: white;
+  background-color: $dark-blue;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.custom-palette {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  padding: 2rem;
+
+  h4 {
+    flex: 1;
+  }
+}
+
+.small-preview {
+  display: flex;
+  flex: 1;
+  margin-right: 1rem;
+
+  div {
+    height: 5rem;
+    flex: 1;
+  }
 }

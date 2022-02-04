@@ -179,6 +179,7 @@ function copyHexToClipboard(hex: HTMLDivElement) {
 }
 
 // local storage stuff
+// TODO: add a way to delete palettes from the library
 interface Palette {
   id: number;
   name: string;
@@ -192,6 +193,9 @@ const saveContainer = document.querySelector(
   ".save-container"
 ) as HTMLDivElement;
 const saveInput = document.querySelector(".save-name") as HTMLInputElement;
+const libraryContainer = document.querySelector(".library-container") as HTMLDivElement;
+const libraryButton = document.querySelector(".library-button") as HTMLButtonElement;
+const closeLibraryButton = document.querySelector(".close-library") as HTMLButtonElement;
 let savedPalettes: Palette[] = [];
 
 saveButton.addEventListener("click", openPalette);
@@ -202,7 +206,9 @@ saveInput.addEventListener("keyup", (event) => {
     event.preventDefault();
     submitSave.click();
   }
-})
+});
+libraryButton.addEventListener("click", openLibrary);
+closeLibraryButton.addEventListener("click", closeLibrary);
 
 function openPalette() {
   const popup = saveContainer.children[0];
@@ -234,6 +240,44 @@ function savePalette() {
   savedPalettes.push(newPalette);
   localStorage.setItem("saved-palettes", JSON.stringify(savedPalettes));
   saveInput.value = "";
+
+  generatePaletteForLib(newPalette);
+}
+
+function generatePaletteForLib(newPalette: Palette) {
+  const paletteDiv = document.createElement("div");
+  paletteDiv.classList.add("custom-palette");
+  const title = document.createElement("h4");
+  title.innerText = newPalette.name;
+  const preview = document.createElement("div");
+  preview.classList.add("small-preview");
+  newPalette.colours.forEach((colour) => {
+    const smallDiv = document.createElement("div");
+    smallDiv.style.backgroundColor = colour;
+    preview.appendChild(smallDiv);
+  });
+
+  const paletteButton = document.createElement("button");
+  paletteButton.classList.add("pick-palette-button", newPalette.id.toString());
+  paletteButton.innerText = "Select";
+
+  paletteDiv.appendChild(title);
+  paletteDiv.appendChild(preview);
+  paletteDiv.appendChild(paletteButton);
+  const popup = libraryContainer.children[0];
+  popup.appendChild(paletteDiv);
+}
+
+function openLibrary() {
+  const popup = libraryContainer.children[0];
+  libraryContainer.classList.add("active");
+  popup.classList.add("active");
+}
+
+function closeLibrary() {
+  const popup = libraryContainer.children[0];
+  libraryContainer.classList.remove("active");
+  popup.classList.remove("active");
 }
 
 randomColours();

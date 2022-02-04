@@ -183,6 +183,15 @@ input[type=range] {
   padding-top: 1rem;
 }
 
+.library-popup {
+  padding: 1rem;
+  justify-content: flex-start;
+  overflow-y: scroll;
+  min-width: 35vw;
+  max-height: 50vh;
+  position: relative;
+}
+
 .submit-save {
   color: white;
   background-color: #1f213f;
@@ -192,7 +201,8 @@ input[type=range] {
   cursor: pointer;
 }
 
-.close-save {
+.close-save,
+.close-library {
   color: white;
   background-color: #1f213f;
   border: none;
@@ -209,6 +219,36 @@ input[type=range] {
 .save-popup.active,
 .library-popup.active {
   transform: translateY(0);
+}
+
+.pick-palette-button {
+  color: white;
+  background-color: #1f213f;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.custom-palette {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  padding: 2rem;
+}
+.custom-palette h4 {
+  flex: 1;
+}
+
+.small-preview {
+  display: flex;
+  flex: 1;
+  margin-right: 1rem;
+}
+.small-preview div {
+  height: 5rem;
+  flex: 1;
 }
 
 /*# sourceMappingURL=style.css.map */
