@@ -166,6 +166,7 @@ saveInput.addEventListener("keyup", (event) => {
 });
 libraryButton.addEventListener("click", openLibrary);
 closeLibraryButton.addEventListener("click", closeLibrary);
+window.addEventListener("DOMContentLoaded", loadPalettesFromLocal);
 function openPalette() {
     const popup = saveContainer.children[0];
     saveContainer.classList.add("active");
@@ -240,6 +241,17 @@ function selectPaletteFromLibrary(event) {
         colourizeSliders(chroma(colour), colourDivs[index].querySelectorAll(".sliders input"));
     });
     setSliders();
+}
+function loadPalettesFromLocal() {
+    const palettes = localStorage.getItem("saved-palettes");
+    if (palettes) {
+        savedPalettes = JSON.parse(palettes);
+    }
+    if (savedPalettes.length) {
+        savedPalettes.forEach((palette) => {
+            generatePaletteForLib(palette);
+        });
+    }
 }
 randomColours();
 //# sourceMappingURL=app.js.map

@@ -215,6 +215,7 @@ saveInput.addEventListener("keyup", (event) => {
 });
 libraryButton.addEventListener("click", openLibrary);
 closeLibraryButton.addEventListener("click", closeLibrary);
+window.addEventListener("DOMContentLoaded", loadPalettesFromLocal);
 
 function openPalette() {
   const popup = saveContainer.children[0];
@@ -297,9 +298,24 @@ function selectPaletteFromLibrary(event: Event) {
     colourDivs[index].style.backgroundColor = colour;
     (colourDivs[index].children[0] as HTMLDivElement).innerText = colour;
     checkTextContrast(chroma(colour), colourDivs[index]);
-    colourizeSliders(chroma(colour), colourDivs[index].querySelectorAll(".sliders input"));
+    colourizeSliders(
+      chroma(colour),
+      colourDivs[index].querySelectorAll(".sliders input")
+    );
   });
   setSliders();
+}
+
+function loadPalettesFromLocal() {
+  const palettes = localStorage.getItem("saved-palettes");
+  if (palettes) {
+    savedPalettes = JSON.parse(palettes);
+  }
+  if (savedPalettes.length) {
+    savedPalettes.forEach((palette) => {
+      generatePaletteForLib(palette);
+    });
+  }
 }
 
 randomColours();
